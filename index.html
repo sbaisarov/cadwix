@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2D/3D preview</title>
+        <style>
+            #canvas2D, #container3D, .canvas-container {
+                width: 100%;
+                height: 100%;
+                border: 1px solid black;
+            }
+            #container3D {display: none;} /* initially hide the 3D container */
+        </style>
+    </head>
+    <body>
+        <button id="panButton">Toggle Pan</button>
+        <button id="cutButton">Toggle Cut</button>
+        <button id="dashingButton">Toggle Dashing</button>
+        <button id="undoButton">Undo</button>
+        <button id="redoButton">Redo</button>
+        <canvas id="canvas2D"></canvas>
+        <canvas id="container3D"></canvas>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <!-- include THREE from cdn -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+        
+        <script src="js/main.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/2D/render.js"></script>
+        <script src="js/2D/Line.js"></script>
+        <script src="js/2D/grid.js"></script>
+        <script src="js/2D/pan.js"></script>
+        <script src="js/2D/axis.js"></script>
+        <script src="js/2D/cutting.js"></script>
+        <script src="js/3D/render.js"></script>
+        <button onclick="togglePreview()">Toggle 2D/3D View</button>
+        <select id="materialSelect">
+            <!-- Options will be added dynamically -->
+        </select>
+        <input type="file" id="fileInput" name="dxfFile">
+    </body>
+</html>
