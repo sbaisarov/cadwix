@@ -6,19 +6,21 @@ function saveDrawing() {
     // Convert drawingData to .dxf format using js-dfx library
 }
 
+function toggleFlags(curFlag) {
+    flags[curFlag] = !flags[curFlag];
+    for (let flag in flags) {
+        if (flag == curFlag) continue;
+        flags[flag] = false;
+    }
+    canvas.selection = false;
+}
+
 function isBetween(n, a, b) {
     return (n - a) * (n - b) <= 0;
 }
 
 function roundToNearest(value, nearest) {
     return Math.round(value / nearest) * nearest;
-}
-
-function findIntersection(line1, line2) {
-    // Find the intersection point of two lines
-    // divide lines into points with a difference of 1 mm
-    linePoints1 = getLinePoints(line1);
-    linePoints2 = getLinePoints(line2);
 }
 
 function calculateSlope(line) {
@@ -40,10 +42,6 @@ function getInterSectionWithXAxis(line, point) {
     let m = calculateSlope(line);   
     let b = calculateYIntercept(line, m);
     return (point.y - b) / m;
-}
-
-function calculateDistance(line) {
-    return Math.sqrt(Math.pow((line.x1 - line.x2), 2) + Math.pow((line.y1 - line.y2), 2)) / mmToPixels;
 }
 
 function togglePreview() {

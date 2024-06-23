@@ -1,13 +1,13 @@
 document.getElementById('panButton').addEventListener('click', function () {
-    isPanning = !isPanning;
-    if (isCutting) {
-        isCutting = false;
+    flags.showPanning = !flags.showPanning;
+    if (flags.showCutting) {
+        flags.showCutting = false;
         flushAxisLines();
     }
 });
 
 canvas.on('mouse:down', function (options) {
-    if (isPanning && options.e) {
+    if (flags.showPanning && options.e) {
         this.isDragging = true;
         this.selection = false;
         this.lastPosX = options.e.clientX;
@@ -16,8 +16,8 @@ canvas.on('mouse:down', function (options) {
 });
 
 canvas.on('mouse:move', function (options) {
-    if (isPanning) canvas.setCursor('move');
-    if (this.isDragging && isPanning) {
+    if (flags.showPanning) canvas.setCursor('move');
+    if (this.isDragging && flags.showPanning) {
         var e = options.e;
         var vpt = this.viewportTransform;
         vpt[4] += e.clientX - this.lastPosX;
@@ -30,7 +30,7 @@ canvas.on('mouse:move', function (options) {
 
 canvas.on('mouse:up', function (options) {
     this.isDragging = false;
-    this.selection = !isPanning;
+    this.selection = !flags.showPanning;
 });
 
 // Zoom canvas

@@ -12,7 +12,7 @@ canvas.on('mouse:move', function (options) {
     canvas.hoverCursor = 'default';
 
     // add axis lines
-    if (!isCutting && !isDashing) return;
+    if (!flags.showCutting && !flags.showDashing) return;
 
     var pointer = canvas.getPointer(options.e);
 
