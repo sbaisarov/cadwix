@@ -49,8 +49,8 @@ canvas.on('mouse:up', function (options) {
     line.addPointToCanvas(options.e);
 
     if (line == null || line.distanceText == null) return;
-    // add line to the array of lines to find axis line passing through
-    lines.push(line);
+    // add line to the array of drawingObjects to find axis line passing through
+    drawingObjects.push(line);
 
     // remove the line
     line.remove('up');

@@ -1,10 +1,11 @@
-class Line extends fabric.Line {
+class Line {
     constructor(x1, y1, x2, y2) {
-        super();
-        // this.x1 = x1;
-        // this.y1 = y1;
-        // this._x2 = x2;
-        // this._y2 = y2;
+        this.x1 = x1;
+        this.y1 = y1;
+        this._x2 = x2;
+        this._y2 = y2;
+
+        this.line = null;
 
         this.distanceText = null;
         this.distance = 0;
@@ -19,23 +20,25 @@ class Line extends fabric.Line {
         // This method should be implemented in the child class
     }
 
-    // get x2() {
-    //     return this._x2;
-    // }
+    get x2() {
+        return this._x2;
+    }
 
-    // get y2() {
-    //     return this._y2;
-    // }
+    get y2() {
+        return this._y2;
+    }
 
-    // set y2(value) {
-    //     this._y2 = value;
-    //     this.line.set({ y2: value });
-    // }
-
-    // set x2(value) {
-    //     this._x2 = value;
-    //     this.line.set({ x2: value });
-    // }
+    set y2(value) {
+        this._y2 = value;
+        if (this.line == null) return;
+        this.line.set({ y2: value })
+    }
+    
+    set x2(value) {
+        this._x2 = value;
+        if (this.line == null) return;
+        this.line.set({ x2: value });
+    }
 
     drawDistanceText() {
         this.distanceText = new fabric.Text(this.distance.toFixed(1) + 'mm', {
@@ -108,33 +111,29 @@ class Line extends fabric.Line {
 }
 
 class AxisLine extends Line {
-    static lines = [];
-
-    constructor(x1, y1, x2, y2) {
-        super(x1, y1, x2, y2);
-    }
+    static drawingObjects = [];
     
     draw() {
         // Draw axis line
-        // this.line = new fabric.Line([this.x1, this.y1, this.x2, this.y2], {
-        //     stroke: 'black',
-        //     strokeWidth: 1,
-        //     selectable: false,
-        //     objectCaching: true
-        // });
-        canvas.add(this);
+        this.line = new fabric.Line([this.x1, this.y1, this.x2, this.y2], {
+            stroke: 'black',
+            strokeWidth: 1,
+            selectable: false,
+            objectCaching: true
+        });
+        canvas.add(this.line);
     }
 
-    static add() {
-        this.lines.push(this);
+    static add(line) {
+        this.drawingObjects.push(line);
     }
     
     static flush() {
-        for (let line of this.lines) {
-            canvas.remove(this.distanceText);
-            canvas.remove(this);
+        for (let line of this.drawingObjects) {
+            canvas.remove(line.distanceText);
+            canvas.remove(line.line);
         }
-        this.lines = [];
+        this.drawingObjects = [];
     }
 }
 

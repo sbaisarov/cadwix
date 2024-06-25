@@ -11,7 +11,7 @@ canvas.on('mouse:move', function (options) {
     canvas.selection = false;
     canvas.hoverCursor = 'default';
 
-    // add axis lines
+    // add axis drawingObjects
     if (!flags.showCutting && !flags.showDashing) return;
 
     var pointer = canvas.getPointer(options.e);
@@ -43,7 +43,7 @@ canvas.on('mouse:move', function (options) {
     lineY1.draw();
     lineY1.calculateDistance();
     lineY1.drawDistanceText();
-    // remove previous axis lines
+    // remove previous axis drawingObjects
     flushAxisLines();
     
     axisLines.push(lineX, lineX1, lineY, lineY1);
