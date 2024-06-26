@@ -29,8 +29,7 @@ canvas.on('mouse:move', function (options) {
     if (line != null) {
         // Remove previous line measurement
         line.remove('move');
-        line.x2 = x;
-        line.y2 = y;
+        line.set({ x2: x, y2: y })
         line.calculateDistance();
         line.drawDistanceText();
         

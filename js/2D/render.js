@@ -37,63 +37,63 @@ canvas.on('mouse:move', function(options) {
     let nearestIntersectionYBottom = canvas.height;
     
     let axisLineTop = new AxisLine(x, y, x, nearestIntersectionYTop);
-    AxisLine.add(axisLineTop);
+    axisLineTop.add();
 
     let axisLineBottom = new AxisLine(x, y, x, nearestIntersectionYBottom);
-    AxisLine.add(axisLineBottom);
+    axisLineBottom.add();
 
     let axisLineLeft = new AxisLine(x, y, nearestIntersectionXLeft, y);
-    AxisLine.add(axisLineLeft);
+    axisLineLeft.add();
 
     let axisLineRight = new AxisLine(x, y, nearestIntersectionXRight, y);
-    AxisLine.add(axisLineRight);
+    axisLineRight.add();
 
     for (let drawingObject of drawingObjects) {
         // create AxisLine and line.distanceText if axisLines of a point are passing through
         // the nearest line
-        if (drawingObject instanceof Line) {
-            // sad workaround to access the line object
-            drawingObject = drawingObject.line;
-        }
         let isIntersectsHorizontal = drawingObject.intersectsWithObject(axisLineLeft) || drawingObject.intersectsWithObject(axisLineRight);
         let isIntersectsVertical = drawingObject.intersectsWithObject(axisLineTop) || drawingObject.intersectsWithObject(axisLineBottom);
         if (isIntersectsHorizontal) {
             intersectionX = getInterSectionWithXAxis(drawingObject, {x: x, y: y});
             // if intersectionX is NaN, then the line is horizontal
             if (isNaN(intersectionX)) {
-                axisLineLeft.x2 = Math.min(axisLineLeft.x2, drawingObject.x1, drawingObject.x2);
-                axisLineRight.x2 = Math.min(axisLineRight.x2, drawingObject.x1, drawingObject.x2);
+                nearestIntersectionXLeft = Math.min(nearestIntersectionXLeft, drawingObject.x1, drawingObject.x2);
+                nearestIntersectionXRight = Math.min(nearestIntersectionXRight, drawingObject.x1, drawingObject.x2);
             }
             else {
                 if (intersectionX < x) {
-                    axisLineLeft.x2 = Math.max(axisLineLeft.x2, intersectionX);
+                    nearestIntersectionXLeft = Math.max(nearestIntersectionXLeft, intersectionX);
                 }
                 else {
-                    axisLineRight.x2 = Math.min(axisLineRight.x2, intersectionX);
+                    nearestIntersectionXRight = Math.min(nearestIntersectionXRight, intersectionX);
                 }
             }
         }
-
+        
         if (isIntersectsVertical) {
             intersectionY = getIntersectionWithYAxis(drawingObject, {x: x, y: y});
             // if intersectionY is NaN, then the line is vertical
             if (isNaN(intersectionY)) {
-                axisLineTop.y2 = Math.min(axisLineTop.y2, drawingObject.y1, drawingObject.y2);
-                axisLineBottom.y2 = Math.min(axisLineBottom.y2, drawingObject.y1, drawingObject.y2);
+                nearestIntersectionYTop = Math.min(nearestIntersectionYTop, drawingObject.y1, drawingObject.y2);
+                nearestIntersectionYBottom = Math.min(nearestIntersectionYBottom, drawingObject.y1, drawingObject.y2);
             }
             else {
                 if (intersectionY < y) {
-                    axisLineTop.y2 = Math.max(axisLineTop.y2, intersectionY);
+                    nearestIntersectionYTop = Math.max(nearestIntersectionYTop, intersectionY);
                 }
                 else {
-                    axisLineBottom.y2 = Math.min(axisLineBottom.y2, intersectionY);
+                    nearestIntersectionYBottom = Math.min(nearestIntersectionYBottom, intersectionY);
                 }
             }
         }
     }
     
-
-    for (let axisLine of AxisLine.drawingObjects) {
+    axisLineLeft.set({x2: nearestIntersectionXLeft});
+    axisLineRight.set({x2: nearestIntersectionXRight});
+    axisLineTop.set({y2: nearestIntersectionYTop});
+    axisLineBottom.set({y2: nearestIntersectionYBottom});
+    
+    for (let axisLine of AxisLine.lines) {
         axisLine.draw();
         axisLine.calculateDistance();
         axisLine.drawDistanceText();
