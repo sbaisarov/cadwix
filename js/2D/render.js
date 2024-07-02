@@ -22,7 +22,6 @@ let flags = {
 let drawingObjects = []; // store all the drawing objects
 
 let axisLines = [];
-let axisLine = null;
 
 let line = null;
 
@@ -30,68 +29,47 @@ canvas.on('mouse:move', function(options) {
     let pointer = canvas.getPointer(options.e);
     let x = roundToNearest(pointer.x, delimeter);
     let y = roundToNearest(pointer.y, delimeter);
+
     AxisLine.flush();
-    let nearestIntersectionXLeft = 0;
-    let nearestIntersectionXRight = canvas.width;
-    let nearestIntersectionYTop = 0;
-    let nearestIntersectionYBottom = canvas.height;
+
+    let intersectionX = {left: 0, right: canvas.width};
+    let intersectionY = {top: 0, bottom: canvas.height}
+
+    let intersectionXWithObject = {left: 0, right: canvas.width};
+    let intersectionYWithObject = {top: 0, bottom: canvas.height}
     
-    let axisLineTop = new AxisLine(x, y, x, nearestIntersectionYTop);
+    let axisLineTop = new AxisLine(x, y, x, intersectionY.top);
     axisLineTop.add();
 
-    let axisLineBottom = new AxisLine(x, y, x, nearestIntersectionYBottom);
+    let axisLineBottom = new AxisLine(x, y, x, intersectionY.bottom);
     axisLineBottom.add();
 
-    let axisLineLeft = new AxisLine(x, y, nearestIntersectionXLeft, y);
+    let axisLineLeft = new AxisLine(x, y, intersectionX.left, y);
     axisLineLeft.add();
 
-    let axisLineRight = new AxisLine(x, y, nearestIntersectionXRight, y);
+    let axisLineRight = new AxisLine(x, y, intersectionX.right, y);
     axisLineRight.add();
 
     for (let drawingObject of drawingObjects) {
         // create AxisLine and line.distanceText if axisLines of a point are passing through
-        // the nearest line
-        let isIntersectsHorizontal = drawingObject.intersectsWithObject(axisLineLeft) || drawingObject.intersectsWithObject(axisLineRight);
-        let isIntersectsVertical = drawingObject.intersectsWithObject(axisLineTop) || drawingObject.intersectsWithObject(axisLineBottom);
-        if (isIntersectsHorizontal) {
-            intersectionX = getInterSectionWithXAxis(drawingObject, {x: x, y: y});
-            // if intersectionX is NaN, then the line is horizontal
-            if (isNaN(intersectionX)) {
-                nearestIntersectionXLeft = Math.min(nearestIntersectionXLeft, drawingObject.x1, drawingObject.x2);
-                nearestIntersectionXRight = Math.min(nearestIntersectionXRight, drawingObject.x1, drawingObject.x2);
-            }
-            else {
-                if (intersectionX < x) {
-                    nearestIntersectionXLeft = Math.max(nearestIntersectionXLeft, intersectionX);
-                }
-                else {
-                    nearestIntersectionXRight = Math.min(nearestIntersectionXRight, intersectionX);
-                }
-            }
+        // the nearest drawing object
+        drawingObject.getIntersectionWithXAxis({x: x, y: y}, intersectionXWithObject);
+        drawingObject.getIntersectionWithYAxis({x: x, y: y}, intersectionYWithObject);
+        if (intersectionXWithObject !== false) {
+            intersectionX.left = Math.max(intersectionX.left, intersectionXWithObject.left);
+            intersectionX.right = Math.min(intersectionX.right, intersectionXWithObject.right);
         }
         
-        if (isIntersectsVertical) {
-            intersectionY = getIntersectionWithYAxis(drawingObject, {x: x, y: y});
-            // if intersectionY is NaN, then the line is vertical
-            if (isNaN(intersectionY)) {
-                nearestIntersectionYTop = Math.min(nearestIntersectionYTop, drawingObject.y1, drawingObject.y2);
-                nearestIntersectionYBottom = Math.min(nearestIntersectionYBottom, drawingObject.y1, drawingObject.y2);
-            }
-            else {
-                if (intersectionY < y) {
-                    nearestIntersectionYTop = Math.max(nearestIntersectionYTop, intersectionY);
-                }
-                else {
-                    nearestIntersectionYBottom = Math.min(nearestIntersectionYBottom, intersectionY);
-                }
-            }
+        if (intersectionYWithObject !== false) {
+            intersectionY.top = Math.max(intersectionY.top, intersectionYWithObject.top);
+            intersectionY.bottom = Math.min(intersectionY.bottom, intersectionYWithObject.bottom);
         }
     }
     
-    axisLineLeft.set({x2: nearestIntersectionXLeft});
-    axisLineRight.set({x2: nearestIntersectionXRight});
-    axisLineTop.set({y2: nearestIntersectionYTop});
-    axisLineBottom.set({y2: nearestIntersectionYBottom});
+    axisLineLeft.set({x2: intersectionX.left});
+    axisLineRight.set({x2: intersectionX.right});
+    axisLineTop.set({y2: intersectionY.top});
+    axisLineBottom.set({y2: intersectionY.bottom});
     
     for (let axisLine of AxisLine.lines) {
         axisLine.draw();

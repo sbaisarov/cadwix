@@ -88,6 +88,64 @@ class Line extends fabric.Line {
         });
         canvas.add(point);
     }
+
+    getIntersectionWithXAxis(point, intersectionX) {
+        let isBetween = this._isBetween(point.y, this.y1, this.y2);
+        if (!isBetween) return false;
+        
+        let m = this._calculateSlope();
+        let b = this._calculateYIntercept(m);
+        let result = (point.y - b) / m;
+        if (result < point.x) {
+            intersectionX.left = result;
+        }
+        else if (point.x == this.x1 || point.x == this.x2) return false;
+
+        else if (isNaN(result)) {
+            // If the line is vertical
+            if (point.x < this.x1) intersectionX.right = this.x1;
+            else if (point.x > this.x1) intersectionX.left = this.x2;
+            else return false;
+        }
+
+        else {
+            intersectionX.right = result;
+        }
+    }
+    
+    getIntersectionWithYAxis(point, intersectionY) {
+        let isBetween = this._isBetween(point.x, this.x1, this.x2);
+        if (!isBetween) return false;
+
+        let result;
+        let m = this._calculateSlope();   
+        let b = this._calculateYIntercept(m);
+        result = m * point.x + b;
+        if (result < point.y) {
+            intersectionY.top = result;
+        }
+        else if (isNaN(result) || result == point.y) {
+            return false;
+        }
+        else {
+            intersectionY.bottom = result;
+        }
+    }
+
+    _calculateSlope() {
+        return (this.y2 - this.y1) / (this.x2 - this.x1);
+    }
+    
+    _calculateYIntercept(m) {
+        return this.y1 - m * this.x1;
+    }
+
+    _isBetween(n, a, b) {
+        // @param n: point x or point y
+        // @param a: line start
+        // @param b: line end
+        return (n - a) * (n - b) <= 0;
+    }
 }
 
 class AxisLine extends Line {
@@ -131,6 +189,7 @@ class CuttingLine extends Line {
         canvas.remove(this.arc);
         canvas.remove(this.angleText);
     }
+        
 }
 
 class DashedLine extends Line {

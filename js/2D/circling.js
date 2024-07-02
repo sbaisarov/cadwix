@@ -32,7 +32,6 @@ canvas.on('mouse:move', function(event) {
     }
     else  {
         circle = new Circle(x, y, radius);
-        Circle.add(circle);
         circle.draw();
     }
 })
@@ -40,5 +39,6 @@ canvas.on('mouse:move', function(event) {
 canvas.on('mouse:up', function(options) {
     if (!flags.showCircling) return;
     isDown = false;
+    drawingObjects.push(circle);
     circle.draw();
 })

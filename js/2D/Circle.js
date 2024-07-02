@@ -42,22 +42,62 @@ class Circle extends fabric.Circle {
         canvas.add(point);
     }
 
-    getIntersectionWithCircle(axisLine, circle) {
-        let r = circle.radius;
-        let k = circle.top;
-        let h = circle.left;
+    getIntersectionWithXAxis(point, intersectionX) {
+        let h = this.left; // x-coordinate of the center of the circle
+        let k = this.top; // y-coordinate of the center of the circle
+        let r = this.radius
 
-        if (axisLine.x1 == axisLine.x2) {
-            let y1 = k + Math.sqrt(r*r - (x-h)*(x-h));
-            let y2 = k - Math.sqrt(r*r - (x-h)*(x-h));
-            let y = Math.max(y1, y2);
-            return {x: axisLine.x1, y: y};
-        } else if (axisLine.y1 == axisLine.y2) {
-            let x1 = h + Math.sqrt(r*r - (y-k)*(y-k));
-            let x2 = h - Math.sqrt(r*r - (y-k)*(y-k));
-            let x = Math.min(x1, x2);
-            return {x: x, y: axisLine.y1};
+        // use the equation of a circle to solve for x
+        let x1 = h + Math.sqrt(r * r - (point.y - k) ** 2);
+        let x2 = h - Math.sqrt(r * r - (point.y - k) ** 2);
+
+        if (isNaN(x1) || isNaN(x2)) return false;
+        let min = Math.min(x1, x2);
+        let max = Math.max(x1, x2);
+
+        if (point.x == h && point.y == k) {
+            intersectionX.left = min;
+            intersectionX.right = max;
+        }
+        
+        else if (point.x > min && point.x < max) {
+            intersectionX.left = min;
+            intersectionX.right = max;
+        }
+
+        else if (point.x < min) {
+            intersectionX.right = min;
+        }
+
+        else if (point.x > max) {
+            intersectionX.left = max;
+        }
+    }
+
+    getIntersectionWithYAxis(point, intersectionY) {
+        let h = this.left; // x-coordinate of the center of the circle
+        let k = this.top; // y-coordinate of the center of the circle
+        let r = this.radius
+
+        let y1 = k + Math.sqrt(r * r - (point.x - h) ** 2);
+        let y2 = k - Math.sqrt(r * r - (point.x - h) ** 2);
+
+        let min = Math.min(y1, y2);
+        let max = Math.max(y1, y2);
+
+        if (point.x == h && point.y == k) {
+            intersectionY.top = min;
+            intersectionY.bottom = max;
+        }
+        else if (point.y > min && point.y < max) {
+            intersectionY.top = min;
+            intersectionY.bottom = max;
+        }
+        else if (point.y < min) {
+            intersectionY.bottom = min;
+        }
+        else if (point.y > max) {
+            intersectionY.top = max;
         }
     }
 }
-
