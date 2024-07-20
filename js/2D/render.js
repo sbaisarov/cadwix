@@ -1,29 +1,11 @@
-let canvas = new fabric.Canvas('canvas2D');
-
-// set size 100 x 100 mm
-canvas.setWidth(378);
-canvas.setHeight(378);
+import { canvas, drawingObjects, delimeter } from '../globals.js';
+import { roundToNearest } from '../utils.js';
+import { AxisLine } from './Line.js';
 
 canvas.freeDrawingBrush.width = 5;
 canvas.freeDrawingBrush.color = 'black';
 canvas.hoverCursor = 'default';
 canvas.selectionColor = 'transparent';
-
-let mmToPixels = 3.78; // 1mm = 3.78px
-let delimeter = 10 * mmToPixels; // 10mm
-
-let flags = {
-    showCutting: false,
-    showPanning: false,
-    showDashing: false,
-    showCircling: false
-};
-
-let drawingObjects = []; // store all the drawing objects
-
-let axisLines = [];
-
-let line = null;
 
 canvas.on('mouse:move', function(options) {
     let pointer = canvas.getPointer(options.e);

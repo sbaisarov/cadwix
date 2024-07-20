@@ -1,30 +1,48 @@
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, 400 / 300, 0.1, 1000);
+let svg = canvas.toSVG();
+
+let scene = new THREE.Scene();
+
+let camera = new THREE.PerspectiveCamera(75, canvas.innerWidth / canvas.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
+let renderer = new THREE.WebGLRenderer();
+renderer.setSize(canvas.width, canvas.height);
+document.getElementById('container3D').appendChild(renderer.domElement);
 
-let canvas = document.getElementById('container3D')
-const renderer = new THREE.WebGLRenderer({canvas: canvas});
+let material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 
-renderer.setSize(400, 300);
-// append child to container
+// Create a loader to load the SVG
+let loader = new SVGLoader();
 
-// Add 3d object to the scene
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// Load the SVG
+let paths = loader.parse(svg);
 
-var light = new THREE.PointLight(0xFFFFFF, 1, 1000);
-light.position.set(0, 0, 0);
-scene.add(light);
+// Create a group to hold the shapes
+let group = new THREE.Group();
 
-function animate() {
-    requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    renderer.render(scene, camera);
+// For each path in the SVG
+for (let i = 0; i < paths.length; i++) {
+    let path = paths[i];
+
+    // Convert the path into a shape
+    let shapes = path.toShapes(true);
+
+    // For each shape
+    for (let j = 0; j < shapes.length; j++) {
+        let shape = shapes[j];
+
+        // Create a geometry from the shape
+        let geometry = new THREE.ShapeBufferGeometry(shape);
+
+        // Create a mesh from the geometry
+        let mesh = new THREE.Mesh(geometry, material);
+
+        // Add the mesh to the group
+        group.add(mesh);
+    }
 }
 
-animate();
+// Add the group to the scene
+scene.add(grooup);

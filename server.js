@@ -1,24 +1,25 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 
 const app = express();
 const path = require('path');
 
 app.use(fileUpload());
-app.use(express.static('public'));
 
-app.use(express.static(path.join(__dirname)));
+// app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    // send files from dist
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 })
-
 
 app.post('/upload', (req, res) => {
     if (!req.files || !req.files.dxfFile) {
         return res.status(400).send('No files were uploaded.');
     }
-
+    
     // Process the uploaded file
 });
 

@@ -1,3 +1,6 @@
+import { canvas, mmToPixels, delimeter } from '../globals.js';
+import { roundToNearest } from '../utils.js';
+
 class Line extends fabric.Line {
     constructor(x1, y1, x2, y2) {
         super([x1, y1, x2, y2], {
@@ -14,10 +17,12 @@ class Line extends fabric.Line {
         this.angleText = null;
         this.angleInRadians = 0;
         this.angleInDegrees = 0;
+
+        this.points = [];
     }
 
     draw() {
-        // This method should be implemented in the child class
+        canvas.add(this);
     }
 
     drawDistanceText() {
@@ -49,7 +54,7 @@ class Line extends fabric.Line {
     drawArc() {
         let radius = this.distance;
         let sweepFlag = (this.angleInRadians <= Math.PI) ? 1 : 0;
-        let path = `M ${line.x1 + radius} ${line.y1} A ${radius} ${radius} 0 0
+        let path = `M ${this.x1 + radius} ${this.y1} A ${radius} ${radius} 0 0
                     ${sweepFlag} ${this.x1 + radius * Math.cos(this.angleInRadians)}
                     ${this.y1 + radius * Math.sin(this.angleInRadians)}`;
         this.arc = new fabric.Path(path, {
@@ -86,6 +91,7 @@ class Line extends fabric.Line {
             stroke: 'red',
             selectable: false
         });
+        this.points.push(point);
         canvas.add(point);
     }
 
@@ -132,6 +138,14 @@ class Line extends fabric.Line {
         }
     }
 
+    removeNode() {
+        for (let point of this.points) {
+            canvas.remove(point);
+        }
+        canvas.remove(this.distanceText);
+        canvas.remove(this);
+    }
+
     _calculateSlope() {
         return (this.y2 - this.y1) / (this.x2 - this.x1);
     }
@@ -154,11 +168,6 @@ class AxisLine extends Line {
     constructor(x1, y1, x2, y2) {
         super(x1, y1, x2, y2);
     }
-    
-    draw() {
-        // Draw axis line
-        canvas.add(this);
-    }
 
     add() {
         AxisLine.lines.push(this);
@@ -179,11 +188,6 @@ class CuttingLine extends Line {
         super(x1, y1, x2, y2);
     }
 
-    draw() {
-        // Draw cutting line
-        canvas.add(this);
-    }
-
     remove(mode) {
         if (mode == 'move') canvas.remove(this.distanceText);
         canvas.remove(this.arc);
@@ -196,11 +200,7 @@ class DashedLine extends Line {
 
     constructor(x1, y1, x2, y2) {
         super(x1, y1, x2, y2);
-    }
-
-    draw() {
-        // Draw dashed line
-        canvas.add(this);
+        this.strokeDashArray = [5, 5];
     }
 
     remove(mode) {
@@ -209,3 +209,5 @@ class DashedLine extends Line {
         canvas.remove(this.angleText);
     }
 }
+
+export { CuttingLine, DashedLine, AxisLine };

@@ -1,16 +1,18 @@
-let rulerLength = 100 * mmToPixels; // 100mm
+import { delimeter, mmToPixels, canvas } from "../globals";
 
 function drawRulersAndGrid() {
-
+    let rulerLength = 100 * mmToPixels; // 100mm
     // Draw horizontal ruler
-    for (var i = 0; i <= rulerLength; i += delimeter) {
-        var line = new fabric.Line([i, 0, i, 20], {
+    var line, text;
+    var i;
+    for (i = 0; i <= rulerLength; i += delimeter) {
+        line = new fabric.Line([i, 0, i, 20], {
             stroke: 'black',
             selectable: false
         });
         canvas.add(line);
 
-        var text = new fabric.Text(Math.round((i / mmToPixels)).toString(), {
+        text = new fabric.Text(Math.round((i / mmToPixels)).toString(), {
             left: i,
             top: 20,
             fontSize: 10,
@@ -20,14 +22,14 @@ function drawRulersAndGrid() {
     }
     
     // Draw vertical ruler
-    for (var i = 0; i <= rulerLength; i += delimeter) {
-        var line = new fabric.Line([0, i, 20, i], {
+    for (i = 0; i <= rulerLength; i += delimeter) {
+        line = new fabric.Line([0, i, 20, i], {
             stroke: 'black',
             selectable: false
         });
         canvas.add(line);
 
-        var text = new fabric.Text(Math.round((i / mmToPixels)).toString(), {
+        text = new fabric.Text(Math.round((i / mmToPixels)).toString(), {
             left: 20,
             top: i,
             fontSize: 10,
@@ -36,7 +38,7 @@ function drawRulersAndGrid() {
         canvas.add(text);
     }
     // Draw grid
-    for (var i = 0; i < canvas.width; i += delimeter) {
+    for (i = 0; i < canvas.width; i += delimeter) {
         var gridLineH = new fabric.Line([0, i, canvas.height, i], {
             stroke: '#ddd',
             selectable: false

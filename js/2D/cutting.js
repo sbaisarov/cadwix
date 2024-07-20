@@ -1,3 +1,9 @@
+import { CuttingLine, DashedLine } from './Line.js';
+import { canvas, drawingObjects, flags, delimeter } from '../globals.js';
+import { roundToNearest, toggleFlags } from '../utils.js';
+
+let line = null;
+
 // cut material in a straight line
 document.getElementById('cutButton').addEventListener('click', function () {
     toggleFlags('showCutting');
@@ -29,7 +35,7 @@ canvas.on('mouse:move', function (options) {
     if (line != null) {
         // Remove previous line measurement
         line.remove('move');
-        line.set({ x2: x, y2: y })
+        line.set({ x2: x, y2: y });
         line.calculateDistance();
         line.drawDistanceText();
         

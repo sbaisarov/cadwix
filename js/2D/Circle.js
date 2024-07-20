@@ -1,4 +1,7 @@
-class Circle extends fabric.Circle {
+import { roundToNearest } from '../utils.js';
+import { delimeter, canvas } from '../globals.js';
+
+export default class Circle extends fabric.Circle {
     static circles = [];
 
     constructor(x, y, radius) {
@@ -12,19 +15,19 @@ class Circle extends fabric.Circle {
         this.stroke = 'black';
         this.strokeWidth = 1;
         this.selectable = false;
+        this.points = [];
     }
 
     draw() {
         // Draw circle
         canvas.add(this);
+        for (let point of this.points) {
+            canvas.add(point);
+        }
     }
 
     remove() {
         canvas.remove(this);
-    }
-
-    static add() {
-        this.circles.push(circle);
     }
 
     addPointToCanvas(event) {
@@ -39,7 +42,7 @@ class Circle extends fabric.Circle {
             stroke: 'red',
             selectable: false
         });
-        canvas.add(point);
+        this.points.push(point);
     }
 
     getIntersectionWithXAxis(point, intersectionX) {
@@ -99,5 +102,12 @@ class Circle extends fabric.Circle {
         else if (point.y > max) {
             intersectionY.top = max;
         }
+    }
+
+    removeNode() {
+        for (let point of this.points) {
+            canvas.remove(point);
+        }
+        canvas.remove(this);
     }
 }

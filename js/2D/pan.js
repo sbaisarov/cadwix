@@ -1,9 +1,8 @@
+import { flags, canvas } from '../globals.js'
+import { toggleFlags } from '../utils.js'
+
 document.getElementById('panButton').addEventListener('click', function () {
-    flags.showPanning = !flags.showPanning;
-    if (flags.showCutting) {
-        flags.showCutting = false;
-        flushAxisLines();
-    }
+    toggleFlags('showPanning');
 });
 
 canvas.on('mouse:down', function (options) {
@@ -28,7 +27,7 @@ canvas.on('mouse:move', function (options) {
     }
 });
 
-canvas.on('mouse:up', function (options) {
+canvas.on('mouse:up', function () {
     this.isDragging = false;
     this.selection = !flags.showPanning;
 });
