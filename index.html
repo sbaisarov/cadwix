@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2D/3D preview</title>
+        <style>
+            #canvas2D, #container3D, .canvas-container {
+                width: 100%;
+                height: 100%;
+                border: 1px solid black;
+            }
+            #container3D {display: none;} /* initially hide the 3D container */
+        </style>
+        <!-- include THREE from cdn -->
+        <script type="module" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js"></script>
+    </head>
+    <body>
+        <button id="panButton">Toggle Pan</button>
+        <button id="cutButton">Toggle Cut</button>
+        <button id="dashingButton">Toggle Dashing</button>
+        <button id="circleButton">Toggle Circle</button>
+        <button id="rectangleButton">Toggle Rectangle</button>
+        <button id="undoButton">Undo</button>
+        <button id="redoButton">Redo</button>
+        <button onclick="togglePreview()">Toggle 2D/3D View</button>
+        
+        <canvas id="canvas2D"></canvas>
+        <canvas id="container3D"></canvas>
+        
+        <input type="file" id="fileInput" name="dxfFile">
+        
+        <select id="materialSelect">
+            <!-- Options will be added dynamically -->
+        </select>
+    </body>
+</html>
