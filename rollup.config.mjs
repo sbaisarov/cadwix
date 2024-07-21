@@ -36,4 +36,8 @@ export default {
             babelHelpers: 'bundled'
         }),
     ],
+    // explisitly set templateIsFile to false to avoid error
+    cache: {
+        templateIsFile: false
+    }
 }
