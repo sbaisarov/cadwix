@@ -25,12 +25,4 @@ class CanvasHistory {
     }
 }
 
-let history = new CanvasHistory(canvas);
-
-document.getElementById('undoButton').addEventListener('click', () => {
-    history.undo();
-});
-
-document.getElementById('redoButton').addEventListener('click', (event) => {
-    history.redo(event);
-});
+export let history = new CanvasHistory(canvas);

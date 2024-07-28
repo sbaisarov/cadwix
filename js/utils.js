@@ -45,16 +45,3 @@ export function getInterSectionWithXAxis(line, point) {
     let b = calculateYIntercept(line, m);
     return (point.y - b) / m;
 }
-
-export function togglePreview() {
-    const canvas2D = document.getElementById('canvas2D');
-    const container3D = document.getElementById('container3D');
-
-    if (canvas2D.style.display === 'none') {
-        canvas2D.style.display = 'block';
-        container3D.style.display = 'none';
-    } else {
-        canvas2D.style.display = 'none';
-        container3D.style.display = 'block';
-    }
-}

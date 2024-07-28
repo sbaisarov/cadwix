@@ -6,7 +6,8 @@ import html2 from 'rollup-plugin-html2';
 const input = [
     'js/2D/pan.js', 'js/2D/circling.js', 'js/2D/grid.js',
     'js/2D/cutting.js', 'js/2D/rectangling.js', 'js/2D/render.js',
-    'js/history.js'
+    'js/3D/render.js',
+    'js/index.js'
 ]
 
 export default {

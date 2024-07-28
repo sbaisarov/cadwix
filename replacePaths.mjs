@@ -3,7 +3,7 @@ import fs from 'fs';
 
 // Get the names of the generated files
 const files = fs.readdirSync('./dist');
-const filesPrefixes = ['pan-', 'circling-', 'grid-', 'render-', 'cutting-', 'rectangling-', 'history-'];
+const filesPrefixes = ['pan-', 'circling-', 'grid-', 'render-', 'cutting-', 'rectangling-', 'index-'];
 const filesToReplace = files.filter(file => filesPrefixes.some(prefix => file.startsWith(prefix)));
 
 // Replace the paths in the index.html file
